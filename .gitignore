@@ -1,0 +1,6 @@
+### Project specifics
+/vendors/*
+
+## IDEs
+.idea
+*.iml

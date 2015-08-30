@@ -1,0 +1,98 @@
+@charset "utf-8";
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+
+    font-family: "Arial", sans-serif;
+    background-color: #000;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+a:hover {
+    color: #00b4ff;
+}
+a:active {
+    color: #004fff;
+}
+
+
+#container {
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: calc(100% - 18rem - 1.5rem);
+
+    background-color: white;
+}
+
+#control {
+    position: absolute;
+    width: 18rem;
+    top: 0.5rem;
+    bottom: 11rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+
+    background-color: white;
+}
+
+#dump {
+    position: absolute;
+    width: 18rem;
+    bottom: 0.5rem;
+    height: 10rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+
+    overflow: auto;
+    font-family: monospace;
+    font-size: 0.75em;
+    word-wrap: break-word;
+
+    background-color: white;
+}
+
+#container svg {
+    display: block;
+}
+
+#control .randomize-all {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+
+}
+
+#control .variable {
+    margin: 0 0 0.5rem 0;
+}
+
+#control .variable label {
+    display: block;
+    overflow: hidden;
+}
+
+#control .variable .random {
+    margin-right: 0.25rem;
+}
+
+#control .variable label .value {
+    padding-left: 0.25rem;
+    font-family: monospace;
+    color: #0000FF;
+}
+
+#control .form-element {
+    font-size: 0.75rem;
+}
+
+#control .form-element.hsla {
+    width: 3rem;
+}

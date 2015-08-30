@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3 Editor</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="vendors/normalize-css/normalize.css" rel="stylesheet">
+    <link href="d3editor.css" rel="stylesheet">
+
+    <script src="vendors/d3/d3.min.js"></script>
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="d3editor.js"></script>
+    <script>
+        function config() {
+            return [
+                {
+                    name: 'r',
+                    dtype: 'int',
+                    bound: [10, 50]
+                },
+                {
+                    name: 'margin',
+                    dtype: 'float',
+                    bound: [0.2, 2]
+                },
+                {
+                    name: 'bg',
+                    dtype: 'hsla'
+                },
+                {
+                    name: 'fill',
+                    dtype: 'hsla'
+                }
+            ];
+        }
+
+        function init(svg, cfg) {
+            svg
+                .attr('version', '1.1')
+                .attr('xmlns', 'http://www.w3.org/2000/svg')
+                .attr('shape-rendering', 'geometricPrecision');
+
+            var data = getPatternData(cfg, +svg.attr('width'), +svg.attr('height'));
+            svg.selectAll('path.object').data(data.data).enter().append('path')
+                .classed('object', true);
+        }
+
+        function update(svg, cfg) {
+            var data = getPatternData(cfg, +svg.attr('width'), +svg.attr('height'));
+
+            svg.style('background-color', cfg['bg']);
+
+            var objects = svg.selectAll('path.object').data(data.data);
+            objects.enter().append('path')
+                .classed('object', true);
+            objects
+                .attr('d', data.path)
+                .attr('fill', cfg['fill'])
+                .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'});
+            objects.exit().remove();
+        }
+
+        function getPatternData(cfg, svgw, svgh) {
+            var r = cfg['r'];
+
+            var data = [];
+            var path = 'M ' + 0 + ' ' + 0 + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,1 ' + (-r) + ' ' + r + ' '
+                    + 'v ' + r + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,0 ' + 0 + ' ' + (r * 2) + ' '
+                    + 'v ' + r + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,1 ' + r + ' ' + r + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,1 ' + r + ' ' + (-r) + ' '
+                    + 'v ' + (-r) + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,0 ' + 0 + ' ' + (-r * 2) + ' '
+                    + 'v ' + (-r) + ' '
+                    + 'a ' + r + ' ' + r + ' 0 0,1 ' + (-r) + ' ' + (-r) + ' '
+                    + 'z';
+
+            var objw = r * 4;
+            var objh = r * 6;
+            var margin = r * cfg['margin'];
+
+            for (var i = 0; i <= Math.floor(svgw / objw); i++) {
+                for (var j = 0; j <= Math.floor(svgh / ((objh + margin) / 2)) + 1; j++ ) {
+                    var x = objw * i + margin * i;
+                    var xoff = (objw / 2) + (margin / 2);
+                    var y = (objh / 2) * j + (margin / 2) * j;
+                    var yoff = (objh / 2) + (margin / 2);
+
+                    data.push({
+                        x: j % 2 === 0 ? x : x - xoff,
+                        y: y - yoff
+                    })
+                }
+            }
+
+            return {
+                data: data,
+                path: path
+            };
+        }
+    </script>
+</head>
+<body>
+    <div id="container"><svg></svg></div>
+    <div id="control">
+        <a class="randomize-all" href="#"><i class="fa fa-random"></i> All</a>
+    </div>
+    <textarea id="dump"></textarea>
+</body>
+</html>
